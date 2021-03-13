@@ -4,11 +4,13 @@
 
 ## Demo: https://charlar-agora.herokuapp.com/api-docs
 
-## Full Demo: http://
+## Full Demo: https://charla-agora.netlify.app/
 
 ## Author: Adex
 
 ## Install dependencies for server
+
+## Note: You need to be added to the mailgun mail service to be able to log in as you would have to confirm email after signup to login
 
 ### 'npm install'
 

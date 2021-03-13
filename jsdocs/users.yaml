@@ -1,0 +1,289 @@
+tags:
+  - name: user
+    description: Operations about user
+    externalDocs:
+      description: Find out more about our store
+      url: http://swagger.io
+  - name: post
+    description: Everything about user posts
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+  - name: comment
+    description: Access to Post comments
+paths:
+  /api/users:
+    post:
+      tags:
+        - user
+      summary: Create user
+      description: This can only be done by the logged in user.
+      operationId: createUser
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: body
+          name: body
+          description: Created user object
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        default:
+          description: successful operation
+  /api/users/login:
+    get:
+      tags:
+        - user
+      summary: Logs user into the system
+      operationId: loginUser
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: username
+          in: query
+          description: The user name for login
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: true
+          type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: string
+          headers:
+            X-Rate-Limit:
+              type: integer
+              format: int32
+              description: calls per hour allowed by the user
+            X-Expires-After:
+              type: string
+              format: date-time
+              description: date in UTC when token expires
+        400:
+          description: Invalid username/password supplied
+  /api/users/logout:
+    get:
+      tags:
+        - user
+      summary: Logs out current logged in user session
+      operationId: logoutUser
+      produces:
+        - application/json
+        - application/xml
+      parameters: []
+      responses:
+        default:
+          description: successful operation
+  /api/users/{userId}:
+    get:
+      tags:
+        - user
+      summary: Get user by userId
+      operationId: getUserByName
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: userId
+          in: path
+          description: The name that needs to be fetched. Use user1 for testing.
+          required: true
+          type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          description: Invalid email supplied
+        404:
+          description: User not found
+    put:
+      tags:
+        - user
+      summary: Updated user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: userId
+          in: path
+          description: name that need to be updated
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Updated user object
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        400:
+          description: Invalid user supplied
+        404:
+          description: User not found
+  /api/users/{userId}/profile:
+    get:
+      tags:
+        - user
+      summary: Get profile of a specific user by userId
+      operationId: getUserProfileById
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: userId
+          in: path
+          description: The name that needs to be fetched. Use user1 for testing.
+          required: true
+          type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          description: Invalid email supplied
+        404:
+          description: User not found
+    put:
+      tags:
+        - user
+      summary: Updated Profile
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: username
+          in: path
+          description: name that need to be updated
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Updated user object
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        400:
+          description: Invalid user supplied
+        404:
+          description: User not found
+    delete:
+      tags:
+        - user
+      summary: Delete Profile
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: username
+          in: path
+          description: The name that needs to be deleted
+          required: true
+          type: string
+      responses:
+        400:
+          description: Invalid username supplied
+        404:
+          description: User not found
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      username:
+        type: string
+      password:
+        type: string
+      userStatus:
+        type: integer
+        format: int32
+        description: User Status
+    xml:
+      name: User
+  Profile:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      firstName:
+        type: string
+      middleName:
+        type: string
+      lastName:
+        type: string
+      profilePicture:
+        type: string
+      location:
+        type: string
+      userStatus:
+        type: integer
+        format: int32
+        description: User Status
+    xml:
+      name: Profile
+  Post:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      message:
+        type: string
+      picture:
+        type: string
+      likeCount:
+        type: integer
+        format: int32
+        description: User Status
+      comments:
+        type: array
+    xml:
+      name: Posts
+  Comments:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      postId:
+        type: integer
+        format: int64
+      message:
+        type: string
+      likeCount:
+        type: integer
+        format: int32
+        description: User Status
+      reply:
+        type: array
+    xml:
+      name: Comments
+  Tag:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+    xml:
+      name: Tag
